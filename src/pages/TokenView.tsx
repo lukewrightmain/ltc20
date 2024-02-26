@@ -42,41 +42,44 @@ const TokenView: React.FC = () => {
 
   useEffect(() => {
     const fetchTokenData = async () => {
-      try {
-        const [tokenResponse, holdersResponse] = await Promise.all([
-          axios.get(`https://api.chikun.market/api/ltc20/${ticker}`),
-          axios.get(`https://api.chikun.market/api/ltc20/holders?ticker=${ticker}&page=${currentPage}`),
-        ]);
-        const { supply, transactions } = tokenResponse.data.result;
-        const holdersData: Holder[] = holdersResponse.data.result.map((holder: any) => ({
-          id: holder.id,
-          address: holder.address,
-          balance: (parseFloat(holder.balance) + parseFloat(holder.transfer_balance)).toString(),
-        }));
-        setTokenData({ ticker, supply, holders: holdersData.length, transactions });
-        setHolders(holdersData);
-      } catch (error) {
-        console.error('Error fetching token data:', error);
-      }
-    };
+        try {
+          const [tokenResponse, holdersResponse] = await Promise.all([
+            axios.get(`https://api.chikun.market/api/ltc20/${ticker}`),
+            axios.get(`https://api.chikun.market/api/ltc20/holders?ticker=${ticker}&page=${currentPage}`),
+          ]);
+          const { supply, transactions } = tokenResponse.data.result;
+          const holdersData: Holder[] = holdersResponse.data.result.map((holder: any) => ({
+            id: holder.id,
+            address: holder.address,
+            balance: (parseFloat(holder.balance) + parseFloat(holder.transfer_balance)).toString(),
+          }));
+          setTokenData({ ticker, supply, holders: holdersData.length, transactions });
+          setHolders(holdersData);
+        } catch (error) {
+          console.error('Error fetching token data:', error);
+        }
+      };
 
     fetchTokenData();
   }, [ticker, currentPage]);
 
   useEffect(() => {
     if (activeTab === 'transactions') {
-      fetchTransactions(); // Fetch transactions when the transactions tab is active
+      fetchTransactions(currentPage); // Fetch transactions for the current page when the transactions tab is active
+    } else {
+      // Reset transactions state when switching to holders tab
+      setTransactions([]);
     }
-  }, [activeTab]);
+  }, [activeTab, currentPage]);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (page: number) => {
     try {
-      const response = await axios.get(`https://api.chikun.market/api/ltc20/transactions?ticker=${ticker}&page=${currentPage}`);
+      const response = await axios.get(`https://api.chikun.market/api/ltc20/transactions?ticker=${ticker}&page=${page}`);
       let transactionData: Transaction[] = response.data.result;
       
       // Sort transactions by timestamp in descending order
       transactionData.sort((a, b) => b.timestamp - a.timestamp);
-
+    
       setTransactions(transactionData);
     } catch (error) {
       console.error('Error fetching transaction data:', error);
@@ -87,9 +90,13 @@ const TokenView: React.FC = () => {
     setActiveTab(tab);
     setCurrentPage(1); // Reset current page to 1 when switching tabs
     if (tab === 'transactions') {
-      fetchTransactions();
+      fetchTransactions(1); // Fetch transactions for the first page when switching to transactions tab
+    } else {
+      // Reset transactions state when switching to holders tab
+      setTransactions([]);
     }
   };
+  
 
   const handleNextPage = () => {
     if (activeTab === 'holders') {
@@ -97,18 +104,14 @@ const TokenView: React.FC = () => {
       // Fetch holders for the next page if necessary
     } else if (activeTab === 'transactions') {
       setCurrentPage(prevPage => prevPage + 1);
-      fetchTransactions(); // Fetch transactions for the next page
+      fetchTransactions(currentPage + 1); // Fetch transactions for the next page by passing currentPage + 1
     }
   };
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(prevPage => prevPage - 1);
-      if (activeTab === 'holders') {
-        // Fetch holders for the previous page if necessary
-      } else if (activeTab === 'transactions') {
-        fetchTransactions(); // Fetch transactions for the previous page
-      }
+      fetchTransactions(currentPage - 1); // Fetch transactions for the previous page
     }
   };
   
