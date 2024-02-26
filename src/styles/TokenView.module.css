@@ -59,6 +59,30 @@
     text-decoration: underline; /* Add underline on hover */
     animation: addressHover 0.5s ease; /* Add hover animation */
   }
+
+  .paginationButtons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .paginationButtons button {
+    background-color: #e6e2e0;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px; /* Adjust margin to increase or decrease space between buttons */
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .paginationButtons button:hover {
+    background-color: #dcd7d5;
+  }
+  
+  .paginationButtons button:disabled {
+    background-color: #ccc; /* Change disabled button color */
+    cursor: not-allowed;
+  }
   
   @keyframes addressHover {
     0% {

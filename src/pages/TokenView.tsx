@@ -22,13 +22,15 @@ const TokenView = () => {
   const [tokenData, setTokenData] = useState<TokenData | null>(null);
   const [holders, setHolders] = useState<Holder[]>([]); // State to store holders data
   const [activeTab, setActiveTab] = useState<'holders' | 'transactions'>('holders');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
     const fetchTokenData = async () => {
       try {
         const [tokenResponse, holdersResponse] = await Promise.all([
           axios.get(`https://api.chikun.market/api/ltc20/${ticker}`),
-          axios.get(`https://api.chikun.market/api/ltc20/holders?ticker=${ticker}&page=1`),
+          axios.get(`https://api.chikun.market/api/ltc20/holders?ticker=${ticker}&page=${currentPage}`),
         ]);
         const { supply, transactions } = tokenResponse.data.result;
         const holdersData: Holder[] = holdersResponse.data.result.map((holder: any) => ({
@@ -38,16 +40,31 @@ const TokenView = () => {
         }));
         setTokenData({ ticker, supply, holders: holdersData.length, transactions });
         setHolders(holdersData);
+        // Set the total number of pages based on the response headers
+        const totalPagesHeader = holdersResponse.headers['x-total-pages'];
+        setTotalPages(parseInt(totalPagesHeader, 10) || 1);
       } catch (error) {
         console.error('Error fetching token data:', error);
       }
     };
 
     fetchTokenData();
-  }, [ticker]); // Fetch data whenever the ticker parameter changes
+  }, [ticker, currentPage]); // Fetch data whenever the ticker parameter or currentPage changes
 
   const handleTabChange = (tab: 'holders' | 'transactions') => {
     setActiveTab(tab);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
   };
 
   if (!tokenData) {
@@ -75,10 +92,14 @@ const TokenView = () => {
           Transactions
         </button>
       </div>
+      <div className={styles.paginationButtons}>
+        <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous Page</button>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages}>Next Page</button>
+      </div>
       <div className={styles.tabContent}>
         {activeTab === 'holders' && (
           <div className={styles.holdersContainer}>
-            {holders.map(holder => (
+            {holders.map((holder) => (
               <a
                 key={holder.id}
                 href={`/ltc20/address/${holder.address}`}
