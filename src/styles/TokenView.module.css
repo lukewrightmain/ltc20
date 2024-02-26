@@ -36,14 +36,19 @@
   
 
   .holdersContainer {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two columns */
-    grid-gap: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px; /* Add rounded corners to the container */
+    overflow: hidden; /* Hide any content that overflows */
   }
   
   .holderItem {
     border: 1px solid #ccc;
     padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px; /* Add rounded corners to each holder item */
+    background-color: #fff; /* Add a background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
   }
   
   .balance {
@@ -87,24 +92,22 @@
 
   .transactionsContainer {
     margin-top: 0px;
-  }
-  
-  .transactionList {
-    list-style: none;
-    padding: 0;
+    border-radius: 10px; /* Add rounded corners to the container */
+    overflow: hidden; /* Hide any content that overflows */
   }
   
   .transactionItem {
     background-color: #f9f9f9;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px; /* Add rounded corners to each transaction item */
     margin-bottom: 10px;
     display: flex;
-    
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
   }
   
   .transactionItem > div {
-    flex: 1 1 50%; /* Display two columns */
+    flex: 1 1 100%;
     padding: 10px;
   }
   
@@ -123,7 +126,28 @@
   .transactionItem a:hover {
     text-decoration: underline;
   }
+
+  @media screen and (min-width: 768px) {
+
+    .transactionItem > div {
+      flex: 1 1 50%; /* Display two columns on screens larger than 768px */
+    }
   
+    .transactionItem > div:nth-child(odd) {
+      border-right: 1px solid #ccc; /* Add border between columns */
+    }
+  
+    .transactionItem > div:nth-child(6n + 1) {
+      border-right: none; /* Remove border for the first column of each row */
+    }
+  }
+
+  @media screen and (max-width: 768px) { 
+    .transactionItem {
+        flex-wrap: wrap; /* Allow items to wrap to next line on smaller screens */
+        overflow: hidden;
+    }
+  }
   @keyframes addressHover {
     0% {
       transform: translateY(0);
