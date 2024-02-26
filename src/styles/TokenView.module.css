@@ -1,0 +1,58 @@
+/* TokenView.module.css */
+.tokenViewContainer {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .tokenInfo {
+    margin-top: 20px;
+  }
+  
+  .tabs {
+    margin-top: 20px;
+  }
+  
+  .tabs button {
+    background-color: #e6e2e0;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .tabs button:hover {
+    background-color: #dcd7d5;
+  }
+  
+  .activeTab {
+    background-color: #c4bdbb;
+  }
+  
+  .tabContent {
+    margin-top: 20px;
+  }
+  
+
+  .holdersContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+    grid-gap: 10px; /* Gap between grid items */
+  }
+  
+  .holderItem {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .address {
+    font-weight: bold;
+  }
+  
+  .balance {
+    font-weight: 500;
+    color: rgb(33, 129, 194);
+  }
+  
+  /* Add any additional styling as needed */
+  
