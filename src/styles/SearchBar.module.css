@@ -1,0 +1,47 @@
+.searchForm {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.searchInput {
+  padding: 10px 20px;
+  border: 2px solid #e6e2e0; /* Slightly thicker border, color to match token cards */
+  border-right: none; /* Remove the right border where the button meets input */
+  border-radius: 5px 0 0 5px; /* Less rounded edges */
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%; /* Make the input longer */
+  max-width: 400px; /* Maximum width, you can adjust as needed */
+}
+
+.searchInput:focus {
+  border-color: #9ca3af; /* Color when the input is focused */
+}
+
+.searchButton {
+  padding: 10px 20px;
+  border: 2px solid #9ca3af; /* Border to match the input focus color */
+  background-color: #1d78e1; /* Keep the button color as per your theme */
+  color: white;
+  border-radius: 0 5px 5px 0; /* Less rounded edges */
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: auto; /* Auto width to fit content */
+}
+
+.searchButton:hover {
+  background-color: #5d95d4; /* Darker shade on hover */
+}
+
+/* Adjust the form container to align with other cards */
+.formContainer {
+  width: calc(100% - 40px); /* Full width minus padding */
+  max-width: 600px; /* Maximum width, you can adjust as needed */
+  margin: 20px auto; /* Center the form container */
+  box-shadow:0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+} 
+  

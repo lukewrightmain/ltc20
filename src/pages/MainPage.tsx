@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styles from '../styles/MainPage.module.css';
+import SearchBar from '../components/SearchBar';
+import liteIcon from '../assets/lite.webp'; // Import the LITE icon
+
 
 type TokenData = {
   ticker: string;
   supply: string;
   holders: number;
+  iconUrl?: string; // Optional if you have icons for other tokens from the API
 };
 
 const MainPage = () => {
@@ -27,6 +31,8 @@ const MainPage = () => {
           ticker: tickers[index],
           supply: response.data.result.supply,
           holders: response.data.result.holders,
+          // Add the iconUrl only if it's available in the response
+          iconUrl: response.data.result.iconUrl || (tickers[index] === 'lite' ? liteIcon : undefined),
         }));
         setTokens(tokenData);
       } catch (error) {
@@ -44,6 +50,7 @@ const MainPage = () => {
 
   return (
     <div className={styles.mainContainer}>
+      <SearchBar />
       <div className={styles.tableHeader}>
         <span>Token</span>
         <span>Supply</span>
@@ -52,12 +59,10 @@ const MainPage = () => {
       {tokens.map((token, index) => (
         <Link to={`/token/${token.ticker}`} key={token.ticker} className={styles.tokenRow}>
           <div className={styles.tokenIndex}>{index + 1}.</div>
-          <div className={styles.tokenIcon}>
-            {/* Placeholder for icon */}
-          </div>
+          {/* Use the iconUrl if available, otherwise use a default/placeholder */}
           <div className={styles.tokenName}>{token.ticker.toUpperCase()}</div>
           <div className={styles.tokenSupply}>{token.supply}</div>
-          <div className={styles.tokenHolders}>{token.holders} Holders</div>
+          <div className={styles.tokenHolders}>{token.holders}</div>
         </Link>
       ))}
     </div>

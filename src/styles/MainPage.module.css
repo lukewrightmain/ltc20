@@ -6,7 +6,7 @@
 
 .tableHeader {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 1rem;
   margin-bottom: 1rem;
   font-weight: bold;
@@ -19,8 +19,6 @@
   text-decoration: none; /* Removes the underline from links */
   color: inherit; /* Inherits the text color from parent */
   display: flex;
-  align-items: center;
-  justify-content: start;
   padding: 10px;
   margin: 5px 0;
   background-color: #fff;
@@ -58,9 +56,3 @@
   flex: 1; /* Each section takes up equal space */
   text-align: center; /* Centers text in each section */
 }
-
-.tokenName {
-  text-align: left; /* Aligns the token name to the left */
-}
-
-/* Additional styling and media queries as needed */
