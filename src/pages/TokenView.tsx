@@ -56,10 +56,12 @@ const TokenView = () => {
   };
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
+    console.log('Current page (before increment):', currentPage); // Log current page before increment
+    setCurrentPage((prevPage) => {
+      console.log('Setting page to:', prevPage + 1); // Log the new page number to be set
+      return prevPage + 1;
+    });
+  };  
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -94,7 +96,7 @@ const TokenView = () => {
       </div>
       <div className={styles.paginationButtons}>
         <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous Page</button>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>Next Page</button>
+        <button onClick={handleNextPage}>Next Page</button>
       </div>
       <div className={styles.tabContent}>
         {activeTab === 'holders' && (
