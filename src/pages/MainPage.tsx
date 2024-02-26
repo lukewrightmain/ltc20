@@ -5,6 +5,7 @@ import styles from '../styles/MainPage.module.css';
 
 type TokenData = {
   ticker: string;
+  supply: string;
   holders: number;
 };
 
@@ -24,6 +25,7 @@ const MainPage = () => {
         );
         const tokenData: TokenData[] = responses.map((response, index) => ({
           ticker: tickers[index],
+          supply: response.data.result.supply,
           holders: response.data.result.holders,
         }));
         setTokens(tokenData);
@@ -42,14 +44,21 @@ const MainPage = () => {
 
   return (
     <div className={styles.mainContainer}>
+      <div className={styles.tableHeader}>
+        <span>Token</span>
+        <span>Supply</span>
+        <span>Holders</span>
+      </div>
       {tokens.map((token, index) => (
-        <div key={token.ticker} className={styles.tokenCard}>
+        <Link to={`/token/${token.ticker}`} key={token.ticker} className={styles.tokenRow}>
           <div className={styles.tokenIndex}>{index + 1}.</div>
-          <Link to={`/token/${token.ticker}`}>
-            <div className={styles.tokenTicker}>{token.ticker.toUpperCase()}</div>
-            <div className={styles.tokenHolders}>{token.holders} Holders</div>
-          </Link>
-        </div>
+          <div className={styles.tokenIcon}>
+            {/* Placeholder for icon */}
+          </div>
+          <div className={styles.tokenName}>{token.ticker.toUpperCase()}</div>
+          <div className={styles.tokenSupply}>{token.supply}</div>
+          <div className={styles.tokenHolders}>{token.holders} Holders</div>
+        </Link>
       ))}
     </div>
   );

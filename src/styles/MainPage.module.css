@@ -1,55 +1,66 @@
 /* MainPage.module.css */
 .mainContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centers horizontally in a column flex container */
-  justify-content: center; /* Centers vertically */
-  gap: 20px; /* Adjust gap size as needed */
-  height: 100vh; /* Take up full viewport height */
-  width: 100%; /* Take up full width */
+  width: 80%;
+  margin: 0 auto;
 }
 
-.tokenCard {
-  background-color: #e6e2e0; /* Updated background color */
-  color: #333; /* Dark text for better contrast */
-  padding: 1rem;
-  width: 50%; /* Adjust width as necessary */
-  margin: 0 auto; /* Center the card horizontally */
+.tableHeader {
   display: flex;
-  justify-content: space-between; /* Adjust space between items */
-  align-items: center; /* Align items vertically */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  border-radius: 15px; /* Rounded edges */
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+  justify-content: space-between;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  text-transform: uppercase; /* Makes the header text uppercase */
+  background-color: #e6e2e0; /* Header background color */
+  border-radius: 8px;
 }
+
+.tokenRow {
+  text-decoration: none; /* Removes the underline from links */
+  color: inherit; /* Inherits the text color from parent */
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #fff;
+  border-radius: 10px; /* Rounded corners for the token rows */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.tokenRow:hover {
+  background-color: #f3f3f3; /* Color change on hover */
+}
+
 
 .tokenIndex {
+  font-size: 16px; /* Adjust the font size as needed */
+  font-weight: bold; /* Makes the index bold */
+  margin-right: 10px; /* Adds some space between the index and icon */
+  color: #333; /* Color for the index */
+}
+
+.tokenLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none; /* Removes the underline from links */
+  color: inherit; /* Inherits the color from parent elements */
+  flex-grow: 1; /* Allows the link to fill the available space */
+}
+
+.tokenIcon {
+  /* Style for the token icon */
   margin-right: 1rem;
-  font-weight: bold;
 }
 
-.tokenTicker {
-  flex-grow: 1;
-  text-align: left;
+.tokenName, .tokenSupply, .tokenHolders {
+  flex: 1; /* Each section takes up equal space */
+  text-align: center; /* Centers text in each section */
 }
 
-.tokenHolders {
-  margin-left: auto; /* Push to the right */
+.tokenName {
+  text-align: left; /* Aligns the token name to the left */
 }
 
-.tokenCard:hover {
-  transform: translateY(-5px); /* Slight lift on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Darker shadow on hover for "lifting" effect */
-}
-
-/* Responsive design adjustments if needed */
-@media (max-width: 768px) {
-  .tokenCard {
-    width: 80%; /* Adjust width on smaller screens */
-    padding: 0.8rem; /* Adjust padding on smaller screens */
-  }
-
-  .mainContainer {
-    gap: 15px; /* Adjust gap size on smaller screens */
-  }
-}
+/* Additional styling and media queries as needed */
