@@ -1,0 +1,50 @@
+.addressViewContainer {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.tokenRowHeader, .tokenRow {
+  display: flex; /* Use flexbox to layout children */
+  margin-bottom: 1rem; /* Space below each row */
+}
+
+.columnHeader, .dataCell {
+  flex: 1; /* Each column will take up equal space */
+  display: flex;
+  justify-content: center; /* Center the content horizontally */
+  align-items: center; /* Center the content vertically */
+  text-align: center; /* Center the text */
+}
+
+.columnHeader {
+  font-weight: bold; /* Make the header text bold */
+  padding: 10px; /* Add some padding */
+  box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* If the text is uppercase in the header, apply this class to the header */
+.columnHeader {
+  text-transform: uppercase;
+}
+
+/* If the background color for the header is different */
+.tokenRowHeader {
+  background-color: #e6e2e0; /* Header background color */
+  border-radius: 8px;
+}
+
+.tokenRow {
+  text-decoration: none; /* Removes the underline from links */
+  color: inherit; /* Inherits the text color from parent */
+  display: flex;
+  padding: 15px;
+  margin: 10px 0;
+  background-color: #fff;
+  border-radius: 10px; /* Rounded corners for the token rows */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.tokenRow:hover {
+  background-color: #f3f3f3; /* Color change on hover */
+}
