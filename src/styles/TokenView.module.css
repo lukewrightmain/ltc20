@@ -38,7 +38,7 @@
   .holdersContainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Two columns */
-    grid-gap: 10px; /* Gap between grid items */
+    grid-gap: 10px;
   }
   
   .holderItem {
