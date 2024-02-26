@@ -45,13 +45,31 @@
     padding: 10px;
   }
   
-  .address {
-    font-weight: bold;
-  }
-  
   .balance {
     font-weight: 500;
     color: rgb(33, 129, 194);
+  }
+
+  .address {
+    font-weight: bold;
+    cursor: pointer; /* Add pointer cursor to indicate clickable */
+  }
+  
+  .address:hover {
+    text-decoration: underline; /* Add underline on hover */
+    animation: addressHover 0.5s ease; /* Add hover animation */
+  }
+  
+  @keyframes addressHover {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translateY(0);
+    }
   }
   
   /* Add any additional styling as needed */

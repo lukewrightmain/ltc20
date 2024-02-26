@@ -79,10 +79,14 @@ const TokenView = () => {
         {activeTab === 'holders' && (
           <div className={styles.holdersContainer}>
             {holders.map(holder => (
-              <div key={holder.id} className={styles.holderItem}>
+              <a
+                key={holder.id}
+                href={`/ltc20/address/${holder.address}`}
+                className={styles.holderItem}
+              >
                 <div className={styles.address}>{holder.address}</div>
                 <div className={styles.balance}>Balance: {holder.balance}</div>
-              </div>
+              </a>
             ))}
           </div>
         )}
