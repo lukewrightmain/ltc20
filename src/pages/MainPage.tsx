@@ -57,8 +57,8 @@ const MainPage = () => {
     <div className={styles.mainContainer}>
       <SearchBar />
       <div className={styles.paginationButtons}>
-        <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous Page</button>
-        <button onClick={handleNextPage}>Next Page</button>
+        <button onClick={handlePrevPage} disabled={currentPage === 1} className={styles.tokenIndex}>Previous Page</button>
+        <button onClick={handleNextPage} className={styles.button}>Next Page</button>
       </div>
       <div className={styles.tableHeader}>
         <span>Token</span>
