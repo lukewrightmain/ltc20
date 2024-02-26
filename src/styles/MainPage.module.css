@@ -4,6 +4,13 @@
   margin: 0 auto;
 }
 
+.paginationButtons {
+  display: flex;
+  justify-content: space-between; /* Space out the buttons evenly */
+  margin-bottom: 1rem; /* Add some space below the buttons */
+}
+
+
 .tableHeader {
   display: flex;
   justify-content: space-around;
@@ -19,8 +26,8 @@
   text-decoration: none; /* Removes the underline from links */
   color: inherit; /* Inherits the text color from parent */
   display: flex;
-  padding: 10px;
-  margin: 5px 0;
+  padding: 15px;
+  margin: 10px 0;
   background-color: #fff;
   border-radius: 10px; /* Rounded corners for the token rows */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
