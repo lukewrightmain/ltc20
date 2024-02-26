@@ -1,0 +1,55 @@
+/* MainPage.module.css */
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers horizontally in a column flex container */
+  justify-content: center; /* Centers vertically */
+  gap: 20px; /* Adjust gap size as needed */
+  height: 100vh; /* Take up full viewport height */
+  width: 100%; /* Take up full width */
+}
+
+.tokenCard {
+  background-color: #e6e2e0; /* Updated background color */
+  color: #333; /* Dark text for better contrast */
+  padding: 1rem;
+  width: 50%; /* Adjust width as necessary */
+  margin: 0 auto; /* Center the card horizontally */
+  display: flex;
+  justify-content: space-between; /* Adjust space between items */
+  align-items: center; /* Align items vertically */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  border-radius: 15px; /* Rounded edges */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+}
+
+.tokenIndex {
+  margin-right: 1rem;
+  font-weight: bold;
+}
+
+.tokenTicker {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.tokenHolders {
+  margin-left: auto; /* Push to the right */
+}
+
+.tokenCard:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Darker shadow on hover for "lifting" effect */
+}
+
+/* Responsive design adjustments if needed */
+@media (max-width: 768px) {
+  .tokenCard {
+    width: 80%; /* Adjust width on smaller screens */
+    padding: 0.8rem; /* Adjust padding on smaller screens */
+  }
+
+  .mainContainer {
+    gap: 15px; /* Adjust gap size on smaller screens */
+  }
+}
