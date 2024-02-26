@@ -84,6 +84,45 @@
     background-color: #ccc; /* Change disabled button color */
     cursor: not-allowed;
   }
+
+  .transactionsContainer {
+    margin-top: 0px;
+  }
+  
+  .transactionList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .transactionItem {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    
+  }
+  
+  .transactionItem > div {
+    flex: 1 1 50%; /* Display two columns */
+    padding: 10px;
+  }
+  
+  .transactionItem > div:nth-child(odd) {
+    border-right: 1px solid #ccc; /* Add border between columns */
+  }
+  
+  .transactionItem > div:nth-child(6n + 1) {
+    border-right: none; /* Remove border for the first column of each row */
+  }
+  
+  .transactionItem a {
+    text-decoration: none;
+  }
+  
+  .transactionItem a:hover {
+    text-decoration: underline;
+  }
   
   @keyframes addressHover {
     0% {

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SearchBar from '../components/SearchBar';
-import styles from '../styles/TokenView.module.css'; // Import CSS for TokenView
-import { useParams } from 'react-router-dom'; // Import useParams hook
+import styles from '../styles/TokenView.module.css';
+import { useParams } from 'react-router-dom';
 
 type TokenData = {
   ticker: string;
@@ -17,13 +17,28 @@ type Holder = {
   balance: string;
 };
 
-const TokenView = () => {
-  const { ticker = '' } = useParams<{ ticker?: string }>(); // Provide a default value for ticker
+type Transaction = {
+  id: number;
+  address_sender: string;
+  address_receiver: string;
+  amount: string;
+  ticker: string;
+  action: string;
+  invalid: boolean;
+  tx_id: string;
+  inscription_id: string;
+  inscription_num: number;
+  height: number;
+  timestamp: number;
+};
+
+const TokenView: React.FC = () => {
+  const { ticker = '' } = useParams<{ ticker?: string }>();
   const [tokenData, setTokenData] = useState<TokenData | null>(null);
-  const [holders, setHolders] = useState<Holder[]>([]); // State to store holders data
+  const [holders, setHolders] = useState<Holder[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [activeTab, setActiveTab] = useState<'holders' | 'transactions'>('holders');
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
     const fetchTokenData = async () => {
@@ -36,39 +51,67 @@ const TokenView = () => {
         const holdersData: Holder[] = holdersResponse.data.result.map((holder: any) => ({
           id: holder.id,
           address: holder.address,
-          balance: holder.balance,
+          balance: (parseFloat(holder.balance) + parseFloat(holder.transfer_balance)).toString(),
         }));
         setTokenData({ ticker, supply, holders: holdersData.length, transactions });
         setHolders(holdersData);
-        // Set the total number of pages based on the response headers
-        const totalPagesHeader = holdersResponse.headers['x-total-pages'];
-        setTotalPages(parseInt(totalPagesHeader, 10) || 1);
       } catch (error) {
         console.error('Error fetching token data:', error);
       }
     };
 
     fetchTokenData();
-  }, [ticker, currentPage]); // Fetch data whenever the ticker parameter or currentPage changes
+  }, [ticker, currentPage]);
 
-  const handleTabChange = (tab: 'holders' | 'transactions') => {
-    setActiveTab(tab);
-  };
+  useEffect(() => {
+    if (activeTab === 'transactions') {
+      fetchTransactions(); // Fetch transactions when the transactions tab is active
+    }
+  }, [activeTab]);
 
-  const handleNextPage = () => {
-    console.log('Current page (before increment):', currentPage); // Log current page before increment
-    setCurrentPage((prevPage) => {
-      console.log('Setting page to:', prevPage + 1); // Log the new page number to be set
-      return prevPage + 1;
-    });
-  };  
+  const fetchTransactions = async () => {
+    try {
+      const response = await axios.get(`https://api.chikun.market/api/ltc20/transactions?ticker=${ticker}&page=${currentPage}`);
+      let transactionData: Transaction[] = response.data.result;
+      
+      // Sort transactions by timestamp in descending order
+      transactionData.sort((a, b) => b.timestamp - a.timestamp);
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
+      setTransactions(transactionData);
+    } catch (error) {
+      console.error('Error fetching transaction data:', error);
     }
   };
 
+  const handleTabChange = (tab: 'holders' | 'transactions') => {
+    setActiveTab(tab);
+    setCurrentPage(1); // Reset current page to 1 when switching tabs
+    if (tab === 'transactions') {
+      fetchTransactions();
+    }
+  };
+
+  const handleNextPage = () => {
+    if (activeTab === 'holders') {
+      setCurrentPage(prevPage => prevPage + 1);
+      // Fetch holders for the next page if necessary
+    } else if (activeTab === 'transactions') {
+      setCurrentPage(prevPage => prevPage + 1);
+      fetchTransactions(); // Fetch transactions for the next page
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+      if (activeTab === 'holders') {
+        // Fetch holders for the previous page if necessary
+      } else if (activeTab === 'transactions') {
+        fetchTransactions(); // Fetch transactions for the previous page
+      }
+    }
+  };
+  
   if (!tokenData) {
     return <div>Loading...</div>;
   }
@@ -114,8 +157,38 @@ const TokenView = () => {
           </div>
         )}
         {activeTab === 'transactions' && (
-          <div>
-            {/* Display transactions data here */}
+          <div className={styles.transactionsContainer}>
+            {transactions.map((transaction) => (
+              <div key={transaction.id} className={styles.transactionItem}>
+                <div>
+                  <div>Sender: {transaction.address_sender}</div>
+                  <div>Receiver: {transaction.address_receiver}</div>
+                </div>
+                <div>
+                  <div>Amount: {transaction.amount}</div>
+                  <div>Ticker: {transaction.ticker}</div>
+                </div>
+                <div>
+                  <div>Action: {transaction.action}</div>
+                  <div>Valid: {transaction.invalid ? 'False' : 'True'}</div> {/* Updated rendering */}
+                </div>
+                <div>
+                  <div>
+                    TX ID: <a href={`https://litecoinspace.org/tx/${transaction.tx_id}`}>View</a>
+                  </div>
+                  <div>
+                    Inscription ID: <a href={`https://ordinalslite.com/inscription/${transaction.inscription_id}`}>View</a>
+                  </div>
+                  <div>
+                    Inscription Number: <a href={`https://ordinalslite.com/inscription/${transaction.inscription_num}`}>View</a>
+                  </div>
+                  <div>
+                    Height: <a href={`https://litecoinspace.org/block/${transaction.height}`}>View</a>
+                  </div>
+                  <div>Timestamp: {new Date(transaction.timestamp * 1000).toLocaleString()}</div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
