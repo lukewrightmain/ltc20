@@ -5,7 +5,11 @@
   }
   
   .tokenInfo {
-    margin-top: 20px;
+    margin-top: 10px;
+  }
+
+  h1{
+    margin-top: 0;
   }
   
   .tabs {
@@ -125,6 +129,19 @@
   
   .transactionItem a:hover {
     text-decoration: underline;
+  }
+
+  .backButton {
+    background-color: #e6e2e0;
+    border: none;
+    padding: 10px 20px;
+    margin-bottom: 5px; /* Spacing before the next content */
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .backButton:hover {
+    background-color: #dcd7d5;
   }
 
   @media screen and (min-width: 768px) {

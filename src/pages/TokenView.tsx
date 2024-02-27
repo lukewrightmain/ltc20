@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SearchBar from '../components/SearchBar';
 import styles from '../styles/TokenView.module.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 type TokenData = {
   ticker: string;
@@ -34,6 +34,7 @@ type Transaction = {
 
 const TokenView: React.FC = () => {
   const { ticker = '' } = useParams<{ ticker?: string }>();
+  const navigate = useNavigate(); // Initialize useNavigate
   const [tokenData, setTokenData] = useState<TokenData | null>(null);
   const [holders, setHolders] = useState<Holder[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -114,6 +115,10 @@ const TokenView: React.FC = () => {
       fetchTransactions(currentPage - 1); // Fetch transactions for the previous page
     }
   };
+
+  const navigateToHome = () => {
+    navigate('/'); // Adjust the path as necessary for your home page
+  };
   
   if (!tokenData) {
     return <div>Loading...</div>;
@@ -123,6 +128,7 @@ const TokenView: React.FC = () => {
     <div className={styles.tokenViewContainer}>
       <SearchBar />
       <div className={styles.tokenInfo}>
+        <button onClick={navigateToHome} className={styles.backButton}>Back to Home</button> {/* Add this line */}
         <h1>{tokenData.ticker.toUpperCase()}</h1>
         <div>Supply: {tokenData.supply}</div>
       </div>

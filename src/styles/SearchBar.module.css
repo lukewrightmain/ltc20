@@ -20,6 +20,10 @@
     align-items: center;
     justify-content: center;
 }
+
+.logo:hover {
+    color: #FFFFFF; /* Set the color to match the non-hover state */
+}
   
 .searchInput {
   padding: 10px 20px;
