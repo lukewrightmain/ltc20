@@ -9,7 +9,7 @@ type CollectionItem = {
   totalBalance: string;
   transferableBalance: string;
   availableBalance: string;
-  transferInscriptions: any[]; // Adjust according to the actual data structure
+  transferInscriptions: []; // Adjust according to the actual data structure
 };
 
 type CollectionsState = {
@@ -54,7 +54,7 @@ const AddressView = () => {
   const fetchTransactions = async (ticker: string, page: number) => {
     try {
       const response = await axios.get(`https://api.chikun.market/api/ltc20/history?address=${address}&ticker=${ticker}&page=${page}`);
-      let transactionData: Transaction[] = response.data.result;
+      let transactionData = response.data.result;
       
       // Sort transactions by timestamp in descending order
       transactionData.sort((a, b) => b.timestamp - a.timestamp);
@@ -77,31 +77,34 @@ const AddressView = () => {
     navigate('/');
   };
 
-  const handleTabChange = (tab: 'tokens' | 'transactions') => {
+  const handleTabChange = (tab: 'tokens' | 'transactions', ticker: string) => {
     setActiveTab(tab);
     setCurrentPage(1); // Reset current page to 1 when switching tabs
     if (tab === 'transactions') {
-      fetchTransactions(1); // Fetch transactions for the first page when switching to transactions tab
+      setSelectedTicker(ticker);
+      fetchTransactions(ticker, 1); // Fetch transactions for the first page when switching to transactions tab
     } else {
       // Reset transactions state when switching to tokens tab
       setTransactions([]);
     }
   };
   
-  const handleNextPage = () => {
+  const handleNextPage = (ticker: string) => {
     if (activeTab === 'tokens') {
       setCurrentPage(prevPage => prevPage + 1);
       // Fetch tokens for the next page if necessary
     } else if (activeTab === 'transactions') {
+      setSelectedTicker(ticker);
       setCurrentPage(prevPage => prevPage + 1);
-      fetchTransactions(currentPage + 1); // Fetch transactions for the next page by passing currentPage + 1
+      fetchTransactions(ticker, currentPage + 1); // Fetch transactions for the next page by passing currentPage + 1
     }
   };
 
-  const handlePrevPage = () => {
+  const handlePrevPage = (ticker: string) => {
     if (currentPage > 1) {
+      setSelectedTicker(ticker);
       setCurrentPage(prevPage => prevPage - 1);
-      fetchTransactions(currentPage - 1); // Fetch transactions for the previous page
+      fetchTransactions(ticker, currentPage - 1); // Fetch transactions for the previous page
     }
   };
 
@@ -120,7 +123,7 @@ const AddressView = () => {
       <div className={styles.tabs}>
         <h2>{selectedTicker.toUpperCase()} Transactions</h2>
         <button
-          className={activeTab === 'tokens' ? styles.activeTab : ''}
+          className={activeTab === 'transactions' ? styles.activeTab : ''}
           onClick={() => handleTabChange('tokens')}
         >
           Back
