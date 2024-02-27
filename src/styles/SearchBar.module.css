@@ -1,10 +1,26 @@
 .searchForm {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  margin-top: 20px;
-}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
+.logo {
+    font-family: '8BitWonder', sans-serif;
+    font-size: 16px; /* Adjust to match the desired size */
+    padding: 5px 5px;
+    background-color: #1d78e1; /* Adjust to match the desired color */
+    color: #FFFFFF;
+    text-align: center;
+    text-decoration: none;
+    margin-right: 20px; /* Adjust space between logo and search bar */
+    cursor: pointer;
+    image-rendering: pixelated;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
 .searchInput {
   padding: 10px 20px;
   border: 2px solid #e6e2e0; /* Slightly thicker border, color to match token cards */
@@ -23,16 +39,19 @@
 }
 
 .searchButton {
-  padding: 10px 20px;
-  border: 2px solid #9ca3af; /* Border to match the input focus color */
-  background-color: #1d78e1; /* Keep the button color as per your theme */
-  color: white;
-  border-radius: 0 5px 5px 0; /* Less rounded edges */
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-  width: auto; /* Auto width to fit content */
-}
+    padding: 10px 20px;
+    border: 2px solid #9ca3af;
+    background-color: #1d78e1;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    display: flex; /* Use flexbox to align text */
+    align-items: center; /* Center text vertically */
+    justify-content: center; /* Center text horizontally */
+  }
+  
 
 .searchButton:hover {
   background-color: #5d95d4; /* Darker shade on hover */
@@ -45,4 +64,81 @@
   margin: 20px auto; /* Center the form container */
   box-shadow:0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 } 
+
+.searchContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* This will vertically align the logo and search bar */
+    margin-top: 20px;
+    margin-bottom: 20px;
+} 
+
+.rightButton {
+    padding: 20px 20px;
+    border: 2px solid #9ca3af; /* Feel free to adjust the border color */
+    background-color: #1d78e1; /* Button background color */
+    color: white; /* Text color, if any text is added */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 32px; /* Font size, adjust if needed */
+    transition: background-color 0.3s ease;
+    background-image: url('https://litecoinlabs.xyz/assets/ChikunSVG-92005a9f.png'); /* Icon image */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain; /* Adjust the size of the icon within the button */
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center alignment vertically */
+    justify-content: center; /* Center alignment horizontally */
+    margin-left: 20px;
+  }
+  
+  .rightButton:hover {
+    background-color: #5d95d4; /* Darker shade on hover */
+  }
+
+/* Add this at the bottom of your CSS file */
+
+@media (max-width: 768px) {
+    .searchContainer {
+      flex-direction: column; /* Stack children vertically */
+      align-items: center; /* Center-align the children */
+    }
+  
+    .logo,
+    .rightButton {
+      width: 50%; /* Give each element half of the container's width */
+      justify-content: center; /* Center content horizontally */
+      padding: 15px 0; /* Add some padding for spacing */
+    }
+  
+    .rightButton {
+      order: 2; /* Place rightButton below the logo */
+    }
+  
+    .searchForm {
+      width: 100%; /* Ensure the form takes full width */
+      order: 3; /* Ensure search form is below the logo and right button */
+      margin-top: 20px; /* Add some space above the search bar */
+    }
+  
+    .searchInput,
+    .searchButton {
+      width: 100%; /* Adjust input and button to take full width */
+      border-radius: 5px; /* Maintain border-radius */
+    }
+  
+    .searchInput {
+      padding: 15px 20px; /* Increase padding for better touch target */
+      font-size: 18px; /* Larger font size for better readability */
+    }
+    
+    /* Ensure that logo and rightButton are within topRow */
+    .logo,
+    .rightButton {
+      margin-left: 0; /* Reset any margins that may affect alignment */
+      margin-right: 0;
+      margin-bottom: 10px;
+      flex-basis: 48%; /* Give a little less than half width to each, to account for padding/margins */
+    }
+  }
   

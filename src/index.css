@@ -13,6 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: '8BitWonder';
+  src: local('8BitWonder'), url('./assets/8-BIT WONDER.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
