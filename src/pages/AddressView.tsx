@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 type CollectionItem = {
   ticker: string;
+  totalBalance: string;
   transferableBalance: string;
   availableBalance: string;
   transferInscriptions: any[]; // Adjust according to the actual data structure
@@ -24,8 +25,18 @@ const AddressView = () => {
     const fetchCollections = async () => {
       try {
         const response = await axios.get(`https://api.chikun.market/api/address/collections?address=${address}`);
-        const { ltc20 } = response.data.result;
-        setCollectionsState({ ltc20 });
+        const ltc20Data = response.data.result.ltc20.map((item) => {
+          // Convert balance strings to numbers and sum them to get total balance
+          const transferable = parseFloat(item.transferableBalance);
+          const available = parseFloat(item.availableBalance);
+          const totalBalance = transferable + available;
+          return {
+            ...item,
+            // Convert total balance back to string if needed or keep it as number depending on your formatting requirements
+            totalBalance: totalBalance.toString(),
+          };
+        });
+        setCollectionsState({ ltc20: ltc20Data });
       } catch (error) {
         console.error('Error fetching collections:', error);
       }
@@ -55,6 +66,7 @@ const AddressView = () => {
         {collectionsState.ltc20.map((item, index) => (
           <div key={index} className={styles.tokenRow}>
             <div className={styles.dataCell}>{item.ticker.toUpperCase()}</div>
+            <div className={styles.dataCell}>{item.totalBalance}</div>
             <div className={styles.dataCell}>{item.availableBalance}</div>
             <div className={styles.dataCell}>{item.transferableBalance}</div>
           </div>
