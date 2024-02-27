@@ -29,8 +29,8 @@ const SearchBar: React.FC = () => {
           Search
         </button>
       </form>
-      <button className={styles.rightButton}>
-      </button>
+        <a href="https://chikun.market" className={styles.rightButton}>
+        </a>
     </div>
   );
 };
