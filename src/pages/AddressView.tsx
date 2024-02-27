@@ -19,12 +19,16 @@ type CollectionsState = {
 const AddressView = () => {
   const { address = '' } = useParams<{ address?: string }>();
   const navigate = useNavigate();
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [selectedTicker, setSelectedTicker] = useState<string>('');
   const [collectionsState, setCollectionsState] = useState<CollectionsState>({ ltc20: [] });
+  const [activeTab, setActiveTab] = useState<'tokens' | 'transactions'>('tokens');
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
     const fetchCollections = async () => {
       try {
-        const response = await axios.get(`https://api.chikun.market/api/address/collections?address=${address}`);
+        const response = await axios.get(`https://api.chikun.market/api/address/collections?address=${address}&page=${currentPage}`);
         const ltc20Data = response.data.result.ltc20.map((item) => {
           // Convert balance strings to numbers and sum them to get total balance
           const transferable = parseFloat(item.transferableBalance);
@@ -47,8 +51,64 @@ const AddressView = () => {
     }
   }, [address]);
 
+  const fetchTransactions = async (ticker: string, page: number) => {
+    try {
+      const response = await axios.get(`https://api.chikun.market/api/ltc20/history?address=${address}&ticker=${ticker}&page=${page}`);
+      let transactionData: Transaction[] = response.data.result;
+      
+      // Sort transactions by timestamp in descending order
+      transactionData.sort((a, b) => b.timestamp - a.timestamp);
+    
+      setTransactions(transactionData);
+    } catch (error) {
+      console.error('Error fetching transaction data:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'transactions' && selectedTicker) {
+      fetchTransactions(selectedTicker, currentPage); // Now fetches transactions for the selected ticker
+    } else {
+      setTransactions([]);
+    }
+  }, [activeTab, currentPage, selectedTicker]);
+
   const navigateToHome = () => {
     navigate('/');
+  };
+
+  const handleTabChange = (tab: 'tokens' | 'transactions') => {
+    setActiveTab(tab);
+    setCurrentPage(1); // Reset current page to 1 when switching tabs
+    if (tab === 'transactions') {
+      fetchTransactions(1); // Fetch transactions for the first page when switching to transactions tab
+    } else {
+      // Reset transactions state when switching to tokens tab
+      setTransactions([]);
+    }
+  };
+  
+  const handleNextPage = () => {
+    if (activeTab === 'tokens') {
+      setCurrentPage(prevPage => prevPage + 1);
+      // Fetch tokens for the next page if necessary
+    } else if (activeTab === 'transactions') {
+      setCurrentPage(prevPage => prevPage + 1);
+      fetchTransactions(currentPage + 1); // Fetch transactions for the next page by passing currentPage + 1
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+      fetchTransactions(currentPage - 1); // Fetch transactions for the previous page
+    }
+  };
+
+  const handleTokenClick = (ticker: string) => {
+    setSelectedTicker(ticker); // Store the selected ticker
+    setActiveTab('transactions'); // Switch to the transactions tab
+    fetchTransactions(ticker, 1); // Fetch transactions for the selected ticker
   };
 
   return (
@@ -56,21 +116,77 @@ const AddressView = () => {
       <SearchBar />
       <button onClick={navigateToHome} className={styles.backButton}>Back to Home</button>
       <h2>{address}</h2>
-      <div className={styles.tokenRowHeader}>
-        <div className={styles.columnHeader}>TICK</div>
-        <div className={styles.columnHeader}>TOTAL BALANCE</div>
-        <div className={styles.columnHeader}>AVAILABLE</div>
-        <div className={styles.columnHeader}>TRANSFERABLE</div>
+      {activeTab === 'transactions' && (
+      <div className={styles.tabs}>
+        <h2>{selectedTicker.toUpperCase()} Transactions</h2>
+        <button
+          className={activeTab === 'tokens' ? styles.activeTab : ''}
+          onClick={() => handleTabChange('tokens')}
+        >
+          Back
+        </button>
       </div>
-      <div>
-        {collectionsState.ltc20.map((item, index) => (
-          <div key={index} className={styles.tokenRow}>
-            <div className={styles.dataCell}>{item.ticker.toUpperCase()}</div>
-            <div className={styles.dataCell}>{item.totalBalance}</div>
-            <div className={styles.dataCell}>{item.availableBalance}</div>
-            <div className={styles.dataCell}>{item.transferableBalance}</div>
-          </div>
-        ))}
+      )}
+      <div className={styles.paginationButtons}>
+        <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous Page</button>
+        <button onClick={handleNextPage}>Next Page</button>
+      </div>
+      <div className={styles.tabContent}>
+        {activeTab === 'tokens' && (
+          <>
+            <div className={styles.tokenRowHeader}>
+              <div className={styles.columnHeader}>TICK</div>
+              <div className={styles.columnHeader}>TOTAL BALANCE</div>
+              <div className={styles.columnHeader}>AVAILABLE</div>
+              <div className={styles.columnHeader}>TRANSFERABLE</div>
+            </div>
+            <div>
+              {collectionsState.ltc20.map((item, index) => (
+              <div key={index} className={styles.tokenRow} onClick={() => handleTokenClick(item.ticker)}>
+                  <div className={styles.dataCell}>{item.ticker.toUpperCase()}</div>
+                  <div className={styles.dataCell}>{item.totalBalance}</div>
+                  <div className={styles.dataCell}>{item.availableBalance}</div>
+                  <div className={styles.dataCell}>{item.transferableBalance}</div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        {activeTab === 'transactions' && (
+          <div className={styles.transactionsContainer}>
+          {transactions.map((transaction) => (
+            <div key={transaction.id} className={styles.transactionItem}>
+              <div>
+                <div>Sender: {transaction.address_sender}</div>
+                <div>Receiver: {transaction.address_receiver}</div>
+              </div>
+              <div>
+                <div>Amount: {transaction.amount}</div>
+                <div>Ticker: {transaction.ticker}</div>
+              </div>
+              <div>
+                <div>Action: {transaction.action}</div>
+                <div>Valid: {transaction.invalid ? 'False' : 'True'}</div> {/* Updated rendering */}
+              </div>
+              <div>
+                <div>
+                  TX ID: <a href={`https://litecoinspace.org/tx/${transaction.tx_id}`}>View</a>
+                </div>
+                <div>
+                  Inscription ID: <a href={`https://ordinalslite.com/inscription/${transaction.inscription_id}`}>View</a>
+                </div>
+                <div>
+                  Inscription Number: <a href={`https://ordinalslite.com/inscription/${transaction.inscription_num}`}>View</a>
+                </div>
+                <div>
+                  Height: <a href={`https://litecoinspace.org/block/${transaction.height}`}>View</a>
+                </div>
+                <div>Timestamp: {new Date(transaction.timestamp * 1000).toLocaleString()}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        )}
       </div>
     </div>
   );

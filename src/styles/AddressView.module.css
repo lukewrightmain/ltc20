@@ -47,4 +47,125 @@
 
 .tokenRow:hover {
   background-color: #f3f3f3; /* Color change on hover */
+  cursor: pointer;
+}
+
+.tabs {
+  margin-top: 20px;
+}
+
+.tabs button {
+  background-color: #e6e2e0;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tabs button:hover {
+  background-color: #dcd7d5;
+}
+
+.activeTab {
+  background-color: #c4bdbb;
+}
+
+.paginationButtons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.paginationButtons button {
+  background-color: #e6e2e0;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px; /* Adjust margin to increase or decrease space between buttons */
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.paginationButtons button:hover {
+  background-color: #dcd7d5;
+}
+
+.paginationButtons button:disabled {
+  background-color: #ccc; /* Change disabled button color */
+  cursor: not-allowed;
+}
+
+.tabContent {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.transactionsContainer {
+  margin-top: 0px;
+  border-radius: 10px; /* Add rounded corners to the container */
+  overflow: hidden; /* Hide any content that overflows */
+}
+
+.transactionItem {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 10px; /* Add rounded corners to each transaction item */
+  margin-bottom: 10px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
+}
+
+.transactionItem > div {
+  flex: 1 1 100%;
+  padding: 10px;
+}
+
+.transactionItem > div:nth-child(odd) {
+  border-right: 1px solid #ccc; /* Add border between columns */
+}
+
+.transactionItem > div:nth-child(6n + 1) {
+  border-right: none; /* Remove border for the first column of each row */
+}
+
+.transactionItem a {
+  text-decoration: none;
+}
+
+.transactionItem a:hover {
+  text-decoration: underline;
+}
+
+@media screen and (min-width: 768px) {
+
+  .transactionItem > div {
+    flex: 1 1 50%; /* Display two columns on screens larger than 768px */
+  }
+
+  .transactionItem > div:nth-child(odd) {
+    border-right: 1px solid #ccc; /* Add border between columns */
+  }
+
+  .transactionItem > div:nth-child(6n + 1) {
+    border-right: none; /* Remove border for the first column of each row */
+  }
+}
+
+@media screen and (max-width: 768px) { 
+  .transactionItem {
+      flex-wrap: wrap; /* Allow items to wrap to next line on smaller screens */
+      overflow: hidden;
+  }
+}
+@keyframes addressHover {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
