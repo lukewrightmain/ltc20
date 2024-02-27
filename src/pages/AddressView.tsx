@@ -3,7 +3,7 @@ import axios from 'axios';
 import SearchBar from '../components/SearchBar';
 import { Link } from 'react-router-dom';
 import styles from '../styles/AddressView.module.css'; // Ensure your CSS module is properly defined
-import { useParams } from 'react-router-dom'; // Import useParams hook
+import { useParams, useNavigate } from 'react-router-dom'; // Import useParams hook
 
 // Updated type to include new fields based on the API response
 type TokenSummary = {
@@ -15,6 +15,7 @@ type TokenSummary = {
 
 const AddressView = () => {
   const { address = '' } = useParams<{ address?: string }>(); // Extract address from URL
+  const navigate = useNavigate(); // Initialize useNavigate
   const [tokenSummary, setTokenSummary] = useState<TokenSummary | null>(null);
 
   useEffect(() => {
@@ -38,6 +39,10 @@ const AddressView = () => {
     }
   }, [address]); // Re-fetch when the address changes
 
+  const navigateToHome = () => {
+    navigate('/'); // Adjust the path as necessary for your home page
+  };
+
   if (!tokenSummary) {
     return <div>Loading...</div>;
   }
@@ -45,6 +50,7 @@ const AddressView = () => {
   return (
     <div className={styles.addressViewContainer}>
       <SearchBar />
+      <button onClick={navigateToHome} className={styles.backButton}>Back to Home</button> {/* Add this line */}
       <h2>{address}</h2>
       <div className={styles.tokenRowHeader}>
         <div className={styles.columnHeader}>TICK</div>
