@@ -16,6 +16,21 @@ type CollectionsState = {
   ltc20: CollectionItem[];
 };
 
+type Transaction = {
+  id: number;
+  address_sender: string;
+  address_receiver: string;
+  amount: string;
+  ticker: string;
+  action: string;
+  invalid: boolean;
+  tx_id: string;
+  inscription_id: string;
+  inscription_num: number;
+  height: number;
+  timestamp: number;
+};
+
 const AddressView = () => {
   const { address = '' } = useParams<{ address?: string }>();
   const navigate = useNavigate();
@@ -29,7 +44,7 @@ const AddressView = () => {
     const fetchCollections = async () => {
       try {
         const response = await axios.get(`https://api.chikun.market/api/address/collections?address=${address}&page=${currentPage}`);
-        const ltc20Data = response.data.result.ltc20.map((item) => {
+        const ltc20Data = response.data.result.ltc20.map((item: { transferableBalance: string; availableBalance: string; }) => {
           // Convert balance strings to numbers and sum them to get total balance
           const transferable = parseFloat(item.transferableBalance);
           const available = parseFloat(item.availableBalance);
@@ -54,7 +69,7 @@ const AddressView = () => {
   const fetchTransactions = async (ticker: string, page: number) => {
     try {
       const response = await axios.get(`https://api.chikun.market/api/ltc20/history?address=${address}&ticker=${ticker}&page=${page}`);
-      let transactionData = response.data.result;
+      const transactionData: Transaction[] = response.data.result;
       
       // Sort transactions by timestamp in descending order
       transactionData.sort((a, b) => b.timestamp - a.timestamp);
@@ -77,34 +92,31 @@ const AddressView = () => {
     navigate('/');
   };
 
-  const handleTabChange = (tab: 'tokens' | 'transactions', ticker: string) => {
+  const handleTabChange = (tab: 'tokens' | 'transactions') => {
     setActiveTab(tab);
     setCurrentPage(1); // Reset current page to 1 when switching tabs
     if (tab === 'transactions') {
-      setSelectedTicker(ticker);
-      fetchTransactions(ticker, 1); // Fetch transactions for the first page when switching to transactions tab
+      fetchTransactions('',1); // Fetch transactions for the first page when switching to transactions tab
     } else {
       // Reset transactions state when switching to tokens tab
       setTransactions([]);
     }
   };
   
-  const handleNextPage = (ticker: string) => {
+  const handleNextPage = () => {
     if (activeTab === 'tokens') {
       setCurrentPage(prevPage => prevPage + 1);
       // Fetch tokens for the next page if necessary
     } else if (activeTab === 'transactions') {
-      setSelectedTicker(ticker);
       setCurrentPage(prevPage => prevPage + 1);
-      fetchTransactions(ticker, currentPage + 1); // Fetch transactions for the next page by passing currentPage + 1
+      fetchTransactions('',currentPage + 1); // Fetch transactions for the next page by passing currentPage + 1
     }
   };
 
-  const handlePrevPage = (ticker: string) => {
+  const handlePrevPage = () => {
     if (currentPage > 1) {
-      setSelectedTicker(ticker);
       setCurrentPage(prevPage => prevPage - 1);
-      fetchTransactions(ticker, currentPage - 1); // Fetch transactions for the previous page
+      fetchTransactions('',currentPage - 1); // Fetch transactions for the previous page
     }
   };
 
