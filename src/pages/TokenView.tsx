@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SearchBar from '../components/SearchBar';
 import styles from '../styles/TokenView.module.css';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
 type TokenData = {
   ticker: string;
@@ -154,14 +154,14 @@ const TokenView: React.FC = () => {
         {activeTab === 'holders' && (
           <div className={styles.holdersContainer}>
             {holders.map((holder) => (
-              <a
+              <Link
                 key={holder.id}
-                href={`/ltc20/address/${holder.address}`}
+                to={`/address/${holder.address}`}
                 className={styles.holderItem}
               >
                 <div className={styles.address}>{holder.address}</div>
                 <div className={styles.balance}>Balance: {holder.balance}</div>
-              </a>
+              </Link>
             ))}
           </div>
         )}

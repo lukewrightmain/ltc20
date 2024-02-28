@@ -1,7 +1,7 @@
 // App.tsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
-import TokenView from './pages/TokenView'; // Import the TokenView component
+import TokenView from './pages/TokenView';
 import AddressView from './pages/AddressView';
 
 const App = () => {
