@@ -12,6 +12,7 @@ const App = () => {
         <Route path="/token/:ticker" element={<TokenView />} /> {/* Define the route for TokenView */}
         <Route path="/address/:address" element={<AddressView />} /> {/* Define the route for TokenView */}
         {/* Define other routes here */}
+        {/* Define other routes here */}
       </Routes>
     </Router>
   );
