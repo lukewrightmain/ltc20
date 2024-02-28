@@ -6,7 +6,7 @@ import AddressView from './pages/AddressView';
 
 const App = () => {
   return (
-    <Router basename="/ltc20">
+    <Router basename="/">
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/token/:ticker" element={<TokenView />} /> {/* Define the route for TokenView */}
